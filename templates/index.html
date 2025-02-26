@@ -3,15 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>Alphabet Position Finder</title>
 </head>
 <body>
     <h1>Welcome to My New Flask App!</h1>
     <p>This is the homepage.</p>
+
     <nav>
         <a href="/">Home</a> |
         <a href="/about">About</a> |
         <a href="/contact">Contact</a>
     </nav>
+
+    <h2>Find Alphabet Position</h2>
+    <form action="/select_alphabet" method="POST">
+        <label for="alphabet">Select an Alphabet:</label>
+        <input type="text" id="alphabet" name="alphabet" maxlength="1" required>
+        <button type="submit">Find Position</button>
+    </form>
+
+    {% if result %}
+        <p><strong>{{ result }}</strong></p>
+    {% endif %}
 </body>
 </html>
