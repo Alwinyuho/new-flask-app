@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 
-app = Flask(__name__)
+app = Flask(_name_)
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'  # Database file
 db = SQLAlchemy(app)
@@ -48,6 +48,16 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-if __name__ == "__main__":
+# New Route for Alphabet Position Finder
+@app.route('/alphabet', methods=['GET', 'POST'])
+def alphabet():
+    position = None
+    if request.method == "POST":
+        letter = request.form.get("letter", "").strip().lower()
+        if letter and len(letter) == 1 and letter.isalpha():
+            position = ord(letter) - ord('a') + 1
+    return render_template("alphabet.html", position=position)
+
+if _name_ == "_main_":
     db.create_all()  # Creates the database
     app.run(debug=True)
