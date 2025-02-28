@@ -58,6 +58,6 @@ def alphabet():
             position = ord(letter) - ord('a') + 1
     return render_template("alphabet.html", position=position)
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     db.create_all()  # Creates the database
     app.run(debug=True)
