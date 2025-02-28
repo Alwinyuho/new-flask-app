@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alphabet Position Finder</title>
+</head>
+<body>
+    <h1>Find Alphabet Position</h1>
+    <form method="POST">
+        <label>Select an Alphabet:</label>
+        <input type="text" name="letter" maxlength="1" required>
+        <button type="submit">Find Position</button>
+    </form>
+    {% if position %}
+        <p>The position of the letter is: {{ position }}</p>
+    {% endif %}
+</body>
+</html>
