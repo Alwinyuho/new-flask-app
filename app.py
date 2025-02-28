@@ -2,7 +2,7 @@ from flask import Flask, render_template
 import os
 import psycopg2
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 DATABASE_URL = os.environ['DATABASE_URL']
 
