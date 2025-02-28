@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Register</title>
+    <style>
+        body { background-color: lightblue; }
+    </style>
+</head>
+<body>
+    <h1>Register Page</h1>
+    <form method="POST" action="{{ url_for('register') }}">
+        {{ form.hidden_tag() }}  <!-- CSRF Protection -->
+        
+        <label for="username">Username:</label>
+        {{ form.username() }}
+        <br><br>
+
+        <label for="password">Password:</label>
+        {{ form.password() }}
+        <br><br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <a href="{{ url_for('login') }}">Already have an account? Login</a>
+</body>
+</html>
