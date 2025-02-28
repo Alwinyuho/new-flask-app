@@ -16,14 +16,14 @@
     </nav>
 
     <h2>Find Alphabet Position</h2>
-    <form action="/select_alphabet" method="POST">
+    <form method="POST">
         <label for="alphabet">Select an Alphabet:</label>
-        <input type="text" id="alphabet" name="alphabet" maxlength="1" required>
+        <input type="text" id="alphabet" name="letter" maxlength="1" required>
         <button type="submit">Find Position</button>
     </form>
 
-    {% if result %}
-        <p><strong>{{ result }}</strong></p>
+    {% if position is not None %}
+        <p><strong>Alphabet Position: {{ position }}</strong></p>
     {% endif %}
 </body>
 </html>
