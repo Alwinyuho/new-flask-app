@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dashboard</title>
+    <style>
+        body { background-color: lightgreen; }
+    </style>
+</head>
+<body>
+    <h1>Welcome, {{ username }}!</h1>
+    <p>This is your dashboard.</p>
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>
