@@ -1,29 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alphabet Position Finder</title>
+    <title>Home</title>
+    <style>
+        body { 
+            background-color: #219287; /* Dark Red */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: rgb(9, 123, 134);
+        }
+        .square-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 300px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.271);
+            color: black;
+            font-size: 1.5em;
+            font-weight: bold;
+            border-radius: 10px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .square-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            color: black;
+            font-size: 1em;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 10px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .square-button:hover {
+            background-color: #ddd;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My New Flask App!</h1>
-    <p>This is the homepage.</p>
-
-    <nav>
-        <a href="/">Home</a> |
-        <a href="/about">About</a> |
-        <a href="/contact">Contact</a>
-    </nav>
-
-    <h2>Find Alphabet Position</h2>
-    <form method="POST">
-        <label for="alphabet">Select an Alphabet:</label>
-        <input type="text" id="alphabet" name="letter" maxlength="1" required>
-        <button type="submit">Find Position</button>
-    </form>
-
-    {% if position is not None %}
-        <p><strong>Alphabet Position: {{ position }}</strong></p>
-    {% endif %}
+    <div class="square-box">Welcome to the Home Page</div>
+    <a href="{{ url_for('login') }}" class="square-button">Login</a>
 </body>
 </html>
