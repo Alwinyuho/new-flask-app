@@ -1,11 +1,49 @@
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user and check_password_hash(user.password, form.password.data):
-            login_user(user)
-            return redirect(url_for('dashboard'))
-        else:
-            flash('Invalid credentials', 'danger')
-    return render_template('login.html', form=form)  # Ensure this is always returned
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            background-color: #2d998c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #1a6f5a;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <p>{{ form.username.label }} {{ form.username() }}</p>
+            <p>{{ form.password.label }} {{ form.password() }}</p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </div>
+</body>
+</html>
