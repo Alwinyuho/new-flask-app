@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'    
+app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///users.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -79,6 +79,13 @@ def dashboard():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+# ✅ Route to Initialize Database Without CMD
+@app.route('/init-db')
+def init_db():
+    with app.app_context():
+        db.create_all()
+        return "Database initialized successfully!"
 
 if __name__ == '__main__':
     app.run(debug=True)
