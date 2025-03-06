@@ -62,20 +62,22 @@ def login():
     form = LoginForm()
     sum_result = None  # Initialize sum variable
 
-    if request.method == 'POST':
-        num1 = request.form.get('num1', type=int)
-        num2 = request.form.get('num2', type=int)
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and check_password_hash(user.password, form.password.data):
+            login_user(user)
 
-        if num1 is not None and num2 is not None:
-            sum_result = num1 + num2  # Perform addition
+            # Get numbers and perform addition
+            num1 = request.form.get('num1', type=int)
+            num2 = request.form.get('num2', type=int)
+            if num1 is not None and num2 is not None:
+                sum_result = num1 + num2  # Perform addition
 
-        if form.validate_on_submit():
-            user = User.query.filter_by(username=form.username.data).first()
-            if user and check_password_hash(user.password, form.password.data):
-                login_user(user)
-                return redirect(url_for('dashboard'))
-            else:
-                flash('Invalid credentials', 'danger')
+            flash(f"Login Successful! The sum of {num1} and {num2} is {sum_result}", "success")
+            return redirect(url_for('dashboard'))
+
+        else:
+            flash('Invalid credentials', 'danger')
 
     return render_template('login.html', form=form, sum_result=sum_result)
 
