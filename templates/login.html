@@ -1,52 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
         body {
-            background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+            background: linear-gradient(to right, #a1c4fd, #c2e9fb);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            font-family: 'Poppins', sans-serif;
+            font-family: Arial, sans-serif;
         }
         .container {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
-            width: 360px;
         }
-        h2 {
-            color: #444;
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-        input {
-            margin: 10px 0;
-            padding: 12px;
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-        button {
-            background: #6a82fb;
-            color: white;
-            padding: 12px;
+        input, button {
+            margin: 10px;
+            padding: 10px;
             width: 100%;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
+            border-radius: 5px;
         }
-        button:hover {
-            background: #a6c1ee;
+        button {
+            background-color: #1a6f5a;
+            color: white;
         }
     </style>
 </head>
@@ -55,15 +35,8 @@
         <h2>Login</h2>
         <form method="POST">
             {{ form.hidden_tag() }}
-            <p>{{ form.username.label }}<br> {{ form.username() }}</p>
-            <p>{{ form.password.label }}<br> {{ form.password() }}</p>
-
-            <p><label>Enter First Number:</label><br>
-            <input type="number" name="num1" required></p>
-
-            <p><label>Enter Second Number:</label><br>
-            <input type="number" name="num2" required></p>
-
+            <p>{{ form.username.label }} {{ form.username() }}</p>
+            <p>{{ form.password.label }} {{ form.password() }}</p>
             <p>{{ form.submit() }}</p>
         </form>
     </div>
