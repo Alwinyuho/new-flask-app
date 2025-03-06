@@ -1,51 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Numbers</title>
     <style>
         body {
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            font-family: 'Poppins', sans-serif;
+            font-family: Arial, sans-serif;
         }
         .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
-            width: 380px;
-        }
-        h2 {
-            color: #444;
-            font-size: 22px;
-        }
-        input {
-            margin: 10px 0;
-            padding: 10px;
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-        button {
-            background: #ff758c;
-            color: white;
-            padding: 12px;
-            width: 100%;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-        button:hover {
-            background: #ff9a9e;
         }
     </style>
 </head>
@@ -53,18 +23,18 @@
     <div class="container">
         <h2>Add Two Numbers</h2>
         <form method="POST">
-            <p><label>First Number:</label><br>
+            <p><label>Enter First Number:</label>
             <input type="number" name="num1" required></p>
 
-            <p><label>Second Number:</label><br>
+            <p><label>Enter Second Number:</label>
             <input type="number" name="num2" required></p>
 
-            <p><button type="submit">Calculate Sum</button></p>
+            <p><button type="submit">Add</button></p>
         </form>
-        
-        {% if sum_result is not none %}
-            <h3>Result: {{ sum_result }}</h3>
+        {% if sum_result is not None %}
+            <p>Sum: {{ sum_result }}</p>
         {% endif %}
+        <a href="{{ url_for('dashboard') }}">Go to Dashboard</a>
     </div>
 </body>
 </html>
