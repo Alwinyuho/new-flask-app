@@ -3,40 +3,12 @@
 <head>
     <title>Dashboard</title>
     <style>
-        body { 
-            background-color: lightgreen; 
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            display: inline-block;
-        }
-        a {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            text-decoration: none;
-            background: darkgreen;
-            color: white;
-            border-radius: 5px;
-        }
-        a:hover {
-            background: limegreen;
-        }
+        body { background-color: lightgreen; text-align: center; padding: 50px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome, {{ username }}!</h1>
-        <p>This is your dashboard.</p>
-
-        <a href="{{ url_for('add_number') }}">Go to Add Numbers Page</a>
-        <a href="{{ url_for('logout') }}">Logout</a>
-    </div>
+    <h1>Welcome, {{ username }}!</h1>
+    <p>This is your dashboard.</p>
+    <a href="{{ url_for('logout') }}">Logout</a>
 </body>
 </html>
