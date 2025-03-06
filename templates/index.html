@@ -4,52 +4,41 @@
     <title>Home</title>
     <style>
         body { 
-            background-color: #219287; /* Dark Red */
+            background: linear-gradient(to right, #a8e6cf, #dcedc1); /* Pastel Gradient */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            color: rgb(9, 123, 134);
+            font-family: Arial, sans-serif;
+            color: #064635;
         }
         .square-box {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 300px;
-            height: 100px;
-            background-color: rgba(255, 255, 255, 0.271);
-            color: black;
+            width: 320px;
+            height: 120px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
             font-size: 1.5em;
             font-weight: bold;
-            border-radius: 10px;
-            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         .square-button {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 80px;
-            height: 80px;
-            background-color: white;
-            color: black;
-            font-size: 1em;
+            width: 100px;
+            height: 50px;
+            background-color: #064635;
+            color: white;
+            font-size: 1.1em;
             font-weight: bold;
             text-decoration: none;
             border-radius: 10px;
-            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-        .square-button:hover {
-            background-color: #ddd;
-        }
-    </style>
-</head>
-<body>
-    <div class="square-box">Welcome to the Home Page</div>
-    <a href="{{ url_for('login') }}" class="square-button">Login</a>
-</body>
-</html>
+            box-shadow: 3px 3px 10px rgba(0, 0, 0,
