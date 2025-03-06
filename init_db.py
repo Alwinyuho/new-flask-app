@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash
 db.create_all()
 
 # Hash the password
-hashed_password = generate_password_hash("Alwin@2469")
+hashed_password = generate_password_hash("Alwin@2469", method='pbkdf2:sha256')
 
 # Create a new user
 new_user = User(username="Alwinyuho", password=hashed_password)
