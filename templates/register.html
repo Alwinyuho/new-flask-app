@@ -2,26 +2,14 @@
 <html lang="en">
 <head>
     <title>Register</title>
-    <style>
-        body { background-color: lightblue; }
-    </style>
 </head>
 <body>
-    <h1>Register Page</h1>
-    <form method="POST" action="{{ url_for('register') }}">
-        {{ form.hidden_tag() }}  <!-- CSRF Protection -->
-        
-        <label for="username">Username:</label>
-        {{ form.username() }}
-        <br><br>
-
-        <label for="password">Password:</label>
-        {{ form.password() }}
-        <br><br>
-
-        <button type="submit">Register</button>
+    <h2>Register</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <p>{{ form.username.label }} {{ form.username() }}</p>
+        <p>{{ form.password.label }} {{ form.password() }}</p>
+        <p>{{ form.submit() }}</p>
     </form>
-
-    <a href="{{ url_for('login') }}">Already have an account? Login</a>
 </body>
 </html>
