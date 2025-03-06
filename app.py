@@ -64,41 +64,33 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)
-            flash('Login Successful!', 'success')
-            return redirect(url_for('add_numbers'))  # Redirects to Add Numbers Page
+            return redirect(url_for('dashboard'))
         else:
             flash('Invalid credentials', 'danger')
-
     return render_template('login.html', form=form)
-
-# ✅ New Route for Adding Numbers (AFTER LOGIN)
-@app.route('/add_numbers', methods=['GET', 'POST'])
-@login_required
-def add_numbers():
-    sum_result = None
-
-    if request.method == 'POST':
-        num1 = request.form.get('num1', type=int)
-        num2 = request.form.get('num2', type=int)
-
-        if num1 is not None and num2 is not None:
-            sum_result = num1 + num2  # Perform addition
-
-    return render_template('add_numbers.html', sum_result=sum_result)
 
 @app.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('dashboard.html', username=current_user.username)
 
+@app.route('/add-number', methods=['GET', 'POST'])
+@login_required
+def add_number():
+    sum_result = None
+    if request.method == 'POST':
+        num1 = request.form.get('num1', type=int)
+        num2 = request.form.get('num2', type=int)
+        if num1 is not None and num2 is not None:
+            sum_result = num1 + num2
+    return render_template('add_number.html', sum_result=sum_result)
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out!', 'info')
     return redirect(url_for('login'))
 
-# ✅ Route to Initialize Database Without CMD
 @app.route('/init-db')
 def init_db():
     with app.app_context():
