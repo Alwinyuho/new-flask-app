@@ -11,7 +11,6 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            flex-direction: column;
             font-family: Arial, sans-serif;
         }
         .container {
@@ -20,19 +19,26 @@
             border-radius: 10px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 300px;
+            width: 350px;
         }
-        input, button {
-            margin: 10px;
+        input {
+            margin: 10px 0;
             padding: 10px;
             width: 100%;
-            border: none;
+            border: 1px solid #ccc;
             border-radius: 5px;
         }
         button {
             background-color: #1a6f5a;
             color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+        }
+        button:hover {
+            background-color: #145846;
         }
     </style>
 </head>
@@ -41,27 +47,18 @@
         <h2>Login</h2>
         <form method="POST">
             {{ form.hidden_tag() }}
-            <p>{{ form.username.label }} {{ form.username() }}</p>
-            <p>{{ form.password.label }} {{ form.password() }}</p>
+            <p>{{ form.username.label }}<br> {{ form.username() }}</p>
+            <p>{{ form.password.label }}<br> {{ form.password() }}</p>
             
-            <!-- New Fields for Number Addition -->
-            <p><label for="num1">Enter First Number:</label>
+            <!-- Number input fields -->
+            <p><label>Enter First Number:</label><br>
             <input type="number" name="num1" required></p>
 
-            <p><label for="num2">Enter Second Number:</label>
+            <p><label>Enter Second Number:</label><br>
             <input type="number" name="num2" required></p>
 
             <p>{{ form.submit() }}</p>
         </form>
-
-        <!-- Display Sum if Available -->
-        {% if sum_result is not none %}
-            <p><strong>Sum of the two numbers: {{ sum_result }}</strong></p>
-        {% endif %}
-
-        {% for message in get_flashed_messages() %}
-            <p style="color:red;">{{ message }}</p>
-        {% endfor %}
     </div>
 </body>
 </html>
