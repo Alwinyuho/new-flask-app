@@ -7,18 +7,19 @@ from wtforms.validators import InputRequired, Length, ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
+# Initialize Flask App
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
-
-# ✅ Corrected PostgreSQL URL Handling
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///users.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# Initialize Database
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+# User Model
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
@@ -28,6 +29,7 @@ class User(db.Model, UserMixin):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# Forms
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(min=4, max=20)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=6, max=50)])
@@ -43,6 +45,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[InputRequired(), Length(min=6, max=50)])
     submit = SubmitField('Login')
 
+# Routes
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -64,7 +67,7 @@ def login():
     form = LoginForm()
     if request.method == 'POST':
         user = User.query.filter_by(username=form.username.data).first()
-        if user and check_password_hash(user.password, form.password.data):
+        if user and check_password_hash(user.password.data, form.password.data):
             login_user(user)
             return redirect(url_for('add_number'))
         else:
@@ -93,15 +96,20 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-# ✅ Route to Initialize Database Without CMD
+# ✅ Route to Initialize Database
 @app.route('/init-db')
 def init_db():
-    try:
-        with app.app_context():
-            db.create_all()
+    with app.app_context():
+        db.create_all()
         return "Database initialized successfully!"
-    except Exception as e:
-        return f"Error initializing database: {str(e)}"
 
+# ✅ Route to Run Migrations
+@app.route('/run-migrations')
+def run_migrations():
+    import subprocess
+    result = subprocess.run(["python", "migrate.py"], capture_output=True, text=True)
+    return f"<pre>{result.stdout}</pre><pre>{result.stderr}</pre>"
+
+# Run App
 if __name__ == '__main__':
     app.run(debug=True)
