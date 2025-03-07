@@ -9,7 +9,13 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///users.db')
+
+# Ensure DATABASE_URL works with PostgreSQL
+DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///users.db')
+if DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgres://")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -94,9 +100,12 @@ def logout():
 # ✅ Route to Initialize Database Without CMD
 @app.route('/init-db')
 def init_db():
-    with app.app_context():
-        db.create_all()
+    try:
+        with app.app_context():
+            db.create_all()
         return "Database initialized successfully!"
+    except Exception as e:
+        return f"Error initializing database: {str(e)}"
 
 if __name__ == '__main__':
     app.run(debug=True)
