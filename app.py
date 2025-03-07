@@ -10,12 +10,8 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
 
-# Ensure DATABASE_URL works with PostgreSQL
-DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///users.db')
-if DATABASE_URL.startswith("postgresql://"):
-    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgres://")
-
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+# ✅ Corrected PostgreSQL URL Handling
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///users.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
