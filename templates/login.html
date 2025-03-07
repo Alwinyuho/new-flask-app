@@ -16,28 +16,47 @@
             padding: 20px;
             border-radius: 10px;
             text-align: center;
+            width: 300px;
         }
         input, button {
             margin: 10px;
             padding: 10px;
             width: 100%;
-            border: none;
+            border: 1px solid #ccc;
             border-radius: 5px;
         }
         button {
             background-color: #1a6f5a;
             color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #155c47;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Login</h2>
-        <form method="POST">
+
+        <!-- ✅ Explicitly added 'action="/login"' -->
+        <form method="POST" action="/login">
             {{ form.hidden_tag() }}
-            <p>{{ form.username.label }} {{ form.username() }}</p>
-            <p>{{ form.password.label }} {{ form.password() }}</p>
+            
+            <p>{{ form.username.label }}<br>{{ form.username() }}</p>
+            <p>{{ form.password.label }}<br>{{ form.password() }}</p>
             <p>{{ form.submit() }}</p>
+
+            <!-- Display Flash Messages (Error Messages) -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div style="color: red;">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
         </form>
     </div>
 </body>
