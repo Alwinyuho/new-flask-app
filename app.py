@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_migrate import Migrate
 import os
 
 # Initialize Flask App
@@ -15,6 +16,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize Database
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)  # ✅ Add Flask-Migrate
+
+# Initialize Login Manager
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -65,9 +69,9 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if request.method == 'POST':
+    if form.validate_on_submit():  # ✅ Corrected login logic
         user = User.query.filter_by(username=form.username.data).first()
-        if user and check_password_hash(user.password.data, form.password.data):
+        if user and check_password_hash(user.password, form.password.data):  # ✅ Fixed password check
             login_user(user)
             return redirect(url_for('add_number'))
         else:
@@ -102,13 +106,6 @@ def init_db():
     with app.app_context():
         db.create_all()
         return "Database initialized successfully!"
-
-# ✅ Route to Run Migrations
-@app.route('/run-migrations')
-def run_migrations():
-    import subprocess
-    result = subprocess.run(["python", "migrate.py"], capture_output=True, text=True)
-    return f"<pre>{result.stdout}</pre><pre>{result.stderr}</pre>"
 
 # Run App
 if __name__ == '__main__':
