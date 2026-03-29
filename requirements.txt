@@ -2,7 +2,7 @@ Flask
 Flask-SQLAlchemy
 Flask-Login
 Flask-WTF
+Flask-Migrate
 gunicorn
 psycopg2-binary
-Flask-Migrate
 python-dotenv
