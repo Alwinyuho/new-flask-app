@@ -8,22 +8,32 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
 import os
 
-# Initialize Flask App
+# -------------------- APP SETUP --------------------
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///users.db')
+
+# ✅ DATABASE FIX (Render PostgreSQL support)
+db_url = os.getenv('DATABASE_URL')
+
+if db_url:
+    if db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
+else:
+    db_url = "sqlite:///users.db"  # local fallback
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize Database
+# -------------------- DATABASE --------------------
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)  # ✅ Add Flask-Migrate
+migrate = Migrate(app, db)
 
-# Initialize Login Manager
+# -------------------- LOGIN MANAGER --------------------
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# User Model
+# -------------------- MODEL --------------------
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
@@ -33,7 +43,7 @@ class User(db.Model, UserMixin):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Forms
+# -------------------- FORMS --------------------
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(min=4, max=20)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=6, max=50)])
@@ -49,16 +59,17 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[InputRequired(), Length(min=6, max=50)])
     submit = SubmitField('Login')
 
-# Routes
+# -------------------- ROUTES --------------------
 @app.route('/')
 def home():
     return render_template('index.html')
 
+# -------- REGISTER --------
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data, method='pbkdf2:sha256')
+        hashed_password = generate_password_hash(form.password.data)
         new_user = User(username=form.username.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
@@ -66,18 +77,28 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
+# -------- LOGIN --------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if form.validate_on_submit():  # ✅ Corrected login logic
+    if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user and check_password_hash(user.password, form.password.data):  # ✅ Fixed password check
+
+        if user and check_password_hash(user.password, form.password.data):
             login_user(user)
-            return redirect(url_for('add_number'))
+            return redirect(url_for('dashboard'))
         else:
             flash('Invalid credentials', 'danger')
+
     return render_template('login.html', form=form)
 
+# -------- DASHBOARD --------
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html', username=current_user.username)
+
+# -------- ADD NUMBERS --------
 @app.route('/add_number', methods=['GET', 'POST'])
 @login_required
 def add_number():
@@ -87,26 +108,33 @@ def add_number():
         num2 = request.form.get('num2', type=int)
         if num1 is not None and num2 is not None:
             sum_result = num1 + num2
+
     return render_template('add_number.html', sum_result=sum_result)
 
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    return render_template('dashboard.html', username=current_user.username)
-
+# -------- LOGOUT --------
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
-# ✅ Route to Initialize Database
+# -------- INIT DATABASE + DEFAULT USER --------
 @app.route('/init-db')
 def init_db():
-    with app.app_context():
-        db.create_all()
-        return "Database initialized successfully!"
+    db.create_all()
 
-# Run App
+    # Create default user
+    existing_user = User.query.filter_by(username="Alwinyuho").first()
+
+    if not existing_user:
+        hashed_password = generate_password_hash("Alwin@2469")
+        new_user = User(username="Alwinyuho", password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        return "Database + Default user created!"
+
+    return "Database already initialized!"
+
+# -------------------- RUN --------------------
 if __name__ == '__main__':
     app.run(debug=True)
