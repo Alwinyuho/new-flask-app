@@ -5,28 +5,28 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_migrate import Migrate
 import os
 
 # -------------------- APP SETUP --------------------
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "supersecretkey")
 
-# ✅ DATABASE FIX (Render PostgreSQL support)
+# -------------------- DATABASE CONFIG --------------------
 db_url = os.getenv('DATABASE_URL')
 
 if db_url:
+    # Fix for Render postgres URL
     if db_url.startswith("postgres://"):
         db_url = db_url.replace("postgres://", "postgresql://", 1)
 else:
-    db_url = "sqlite:///users.db"  # local fallback
+    # Fallback for local development
+    db_url = "sqlite:///users.db"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # -------------------- DATABASE --------------------
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
 # -------------------- LOGIN MANAGER --------------------
 login_manager = LoginManager()
@@ -37,7 +37,7 @@ login_manager.login_view = 'login'
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(150), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -123,7 +123,6 @@ def logout():
 def init_db():
     db.create_all()
 
-    # Create default user
     existing_user = User.query.filter_by(username="Alwinyuho").first()
 
     if not existing_user:
