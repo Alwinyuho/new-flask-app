@@ -10,16 +10,15 @@ import os
 # -------------------- APP SETUP --------------------
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "supersecretkey")
+app.config['PROPAGATE_EXCEPTIONS'] = True  # helps debug errors
 
 # -------------------- DATABASE CONFIG --------------------
 db_url = os.getenv('DATABASE_URL')
 
 if db_url:
-    # Fix for Render postgres URL
     if db_url.startswith("postgres://"):
         db_url = db_url.replace("postgres://", "postgresql://", 1)
 else:
-    # Fallback for local development
     db_url = "sqlite:///users.db"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
@@ -39,9 +38,10 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
 
+# ✅ FIXED USER LOADER (important)
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
 
 # -------------------- FORMS --------------------
 class RegisterForm(FlaskForm):
